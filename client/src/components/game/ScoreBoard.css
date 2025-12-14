@@ -1,0 +1,123 @@
+.scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.scoreboard-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreboard-vs {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.player-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 100px;
+}
+
+.player-score.is-me .player-score-name {
+  font-weight: 600;
+}
+
+.player-score-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.player-score-name {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-score-color-badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.player-score-color-badge.pink {
+  background: rgba(244, 114, 182, 0.2);
+  color: var(--color-pink);
+}
+
+.player-score-color-badge.blue {
+  background: rgba(96, 165, 250, 0.2);
+  color: var(--color-blue);
+}
+
+.player-score-rounds {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.round-marker {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.round-marker.pink {
+  border-color: var(--color-pink);
+}
+
+.round-marker.blue {
+  border-color: var(--color-blue);
+}
+
+.round-marker.filled.pink {
+  background: var(--color-pink);
+  box-shadow: 0 0 8px rgba(244, 114, 182, 0.5);
+}
+
+.round-marker.filled.blue {
+  background: var(--color-blue);
+  box-shadow: 0 0 8px rgba(96, 165, 250, 0.5);
+}
+
+@media (max-width: 480px) {
+  .scoreboard {
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .player-score {
+    min-width: 80px;
+  }
+  
+  .player-score-name {
+    font-size: 0.75rem;
+    max-width: 80px;
+  }
+  
+  .round-marker {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}

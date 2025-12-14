@@ -1,0 +1,37 @@
+.name-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.name-input-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.name-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  background: var(--color-surface-light);
+  border: 2px solid var(--color-border);
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: var(--color-pink);
+  box-shadow: 0 0 0 3px rgba(244, 114, 182, 0.2);
+}
+
+.name-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.name-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

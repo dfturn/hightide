@@ -1,0 +1,61 @@
+.hex-tile {
+  transition: filter 0.18s ease;
+}
+
+.hex-tile:hover .hex-polygon {
+  filter: brightness(1.08);
+}
+
+.hex-polygon {
+  transition: filter 0.2s ease, stroke 0.2s ease;
+}
+
+.hex-tile.selected .hex-polygon {
+  filter: drop-shadow(0 0 8px var(--glow-color, rgba(255, 255, 255, 0.6)))
+    drop-shadow(0 0 18px var(--glow-color, rgba(255, 255, 255, 0.35)))
+    brightness(1.18);
+}
+
+.hex-tile.legal-move .hex-polygon,
+.hex-tile.legal-destination .hex-polygon {
+  filter: brightness(1.05);
+}
+
+.hex-indicator {
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgba(15, 23, 42, 0.5));
+}
+
+.hex-indicator.move {
+  animation: indicator-pulse 1.2s ease-in-out infinite;
+}
+
+.hex-indicator.destination {
+  animation: indicator-flash 0.9s ease-in-out infinite;
+}
+
+.hex-stack-count {
+  pointer-events: none;
+  user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes indicator-pulse {
+  0%, 100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes indicator-flash {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}

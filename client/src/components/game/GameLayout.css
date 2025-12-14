@@ -1,0 +1,13 @@
+.game-layout {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-surface) 100%);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .game-layout {
+    padding: 1rem;
+  }
+}

@@ -1,0 +1,46 @@
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.game-header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--color-pink) 0%, var(--color-blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.game-header-code {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.game-header-code-label {
+  color: var(--color-text-muted);
+}
+
+.game-header-code-value {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-weight: 600;
+  color: var(--color-yellow);
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .game-header-title {
+    font-size: 1rem;
+  }
+}
