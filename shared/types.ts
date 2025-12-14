@@ -38,6 +38,7 @@ export interface GameState {
   winner: string | null;
   roundWinner: string | null;
   lastMovePlayerId: string | null;
+  lastMove: Move | null;
 }
 
 export interface Move {

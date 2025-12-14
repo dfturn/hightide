@@ -74,6 +74,13 @@ function GamePage() {
   const currentPlayer = gameState.players.find((p) => p.id === playerId);
   const opponent = gameState.players.find((p) => p.id !== playerId);
   const isMyTurn = gameState.currentPlayerId === playerId;
+  const lastMoveToShow =
+    isMyTurn &&
+    gameState.lastMove &&
+    gameState.lastMovePlayerId &&
+    gameState.lastMovePlayerId !== playerId
+      ? gameState.lastMove
+      : null;
 
   const handleTileClick = (q: number, r: number) => {
     if (!isMyTurn || gameState.phase !== "playing") return;
@@ -174,6 +181,7 @@ function GamePage() {
         selectedPosition={gameState.selectedPosition}
         legalMoves={legalMoves}
         legalDestinations={legalDestinations}
+        lastMove={lastMoveToShow}
         isMyTurn={isMyTurn}
         onTileClick={handleTileClick}
       />

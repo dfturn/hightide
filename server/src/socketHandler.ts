@@ -64,6 +64,8 @@ function startGame(room: GameRoom): void {
   game.phase = "playing";
   game.selectedPosition = null;
   game.roundWinner = null;
+  game.lastMove = null;
+  game.lastMovePlayerId = null;
 
   // Set first player
   const firstPlayer = getPlayerByColor(
@@ -87,6 +89,8 @@ function startNextRound(room: GameRoom, loserColor: TileColor): void {
   game.selectedPosition = null;
   game.roundWinner = null;
   game.roundNumber++;
+  game.lastMove = null;
+  game.lastMovePlayerId = null;
 
   // Loser starts next round
   game.firstPlayerColor = loserColor;
@@ -224,6 +228,7 @@ export function initializeSocketServer(
         winner: null,
         roundWinner: null,
         lastMovePlayerId: null,
+        lastMove: null,
       };
 
       const room: GameRoom = {
@@ -418,26 +423,15 @@ export function initializeSocketServer(
       }
 
       // Execute move
-      console.log(
-        `Executing move from (${game.selectedPosition.q},${game.selectedPosition.r}) to (${to.q},${to.r})`
-      );
-      const stacksBefore = game.stacks
-        .map((s) => `(${s.position.q},${s.position.r}):${s.tiles.length}`)
-        .join(", ");
-      console.log(`Stacks before: ${stacksBefore}`);
-
       game.stacks = executeMove(game.stacks, {
         from: game.selectedPosition,
         to,
       });
 
-      const stacksAfter = game.stacks
-        .map((s) => `(${s.position.q},${s.position.r}):${s.tiles.length}`)
-        .join(", ");
-      console.log(`Stacks after: ${stacksAfter}`);
-
+      const moveFrom = game.selectedPosition;
       game.selectedPosition = null;
       game.lastMovePlayerId = currentPlayerId;
+      game.lastMove = moveFrom ? { from: moveFrom, to } : null;
 
       // Switch turn
       switchTurn(game);

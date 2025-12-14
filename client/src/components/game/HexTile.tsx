@@ -79,8 +79,9 @@ function HexTile({
   onClick,
 }: HexTileProps) {
   const hexPath = getHexPath(size * 0.95);
-  const topTile = stack.tiles[stack.tiles.length - 1];
   const stackHeight = stack.tiles.length;
+  const topTile = stack.tiles[stackHeight - 1];
+  const underTile = stack.tiles[stackHeight - 2];
 
   // Don't render empty stacks
   if (!topTile) {
@@ -117,6 +118,9 @@ function HexTile({
   if (isSelected) {
     tileStyle["--glow-color"] = getTileGlowColor(topTile.color);
   }
+
+  // Text color comes from the tile immediately beneath the top tile (if any)
+  const textColor = underTile ? getTileColor(underTile.color) : "#000000";
 
   const indicatorStroke = isLegalDestination ? "#fcd34d" : "#38bdf8";
   const indicatorFill = isLegalDestination
@@ -158,7 +162,7 @@ function HexTile({
         textAnchor="middle"
         dominantBaseline="central"
         className="hex-stack-count"
-        fill={topTile.color === "yellow" ? "#78350f" : "#ffffff"}
+        fill={textColor}
         fontSize={size * 0.5}
         fontWeight="bold"
       >

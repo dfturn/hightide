@@ -128,6 +128,12 @@ export function GameProvider({ children }: GameProviderProps) {
         selectedPosition: state.selectedPosition
           ? { ...state.selectedPosition }
           : null,
+        lastMove: state.lastMove
+          ? {
+              from: { ...state.lastMove.from },
+              to: { ...state.lastMove.to },
+            }
+          : null,
       };
       setGameState(clonedState);
       // Clear destinations when game state changes (new turn)

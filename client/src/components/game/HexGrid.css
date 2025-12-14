@@ -15,6 +15,41 @@
   max-height: 500px;
 }
 
+.last-move-indicator {
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(15, 23, 42, 0.45));
+}
+
+.last-move-indicator.from polygon {
+  animation: last-move-pulse 1.6s ease-in-out infinite;
+}
+
+.last-move-indicator.to polygon {
+  animation: last-move-flare 1.05s ease-in-out infinite;
+}
+
+@keyframes last-move-pulse {
+  0%, 100% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes last-move-flare {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.09);
+  }
+}
+
 @media (max-width: 480px) {
   .hex-grid-container {
     padding: 0.5rem;

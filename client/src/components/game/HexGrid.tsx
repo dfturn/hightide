@@ -1,4 +1,4 @@
-import { Stack, Position, positionsEqual } from "@shared/types";
+import { Stack, Position, positionsEqual, Move } from "@shared/types";
 import HexTile from "./HexTile";
 import "./HexGrid.css";
 
@@ -7,8 +7,21 @@ interface HexGridProps {
   selectedPosition: Position | null;
   legalMoves: Position[];
   legalDestinations: Position[];
+  lastMove: Move | null;
   isMyTurn: boolean;
   onTileClick: (q: number, r: number) => void;
+}
+
+// Generate pointy-top hexagon path
+function getHexPath(size: number): string {
+  const points: string[] = [];
+  for (let i = 0; i < 6; i++) {
+    const angle = (Math.PI / 3) * i - Math.PI / 6;
+    const px = size * Math.cos(angle);
+    const py = size * Math.sin(angle);
+    points.push(`${px},${py}`);
+  }
+  return points.join(" ");
 }
 
 // Convert axial coordinates to pixel position
@@ -27,6 +40,7 @@ function HexGrid({
   selectedPosition,
   legalMoves,
   legalDestinations,
+  lastMove,
   isMyTurn,
   onTileClick,
 }: HexGridProps) {
@@ -75,6 +89,10 @@ function HexGrid({
   const offsetX = -minX + padding;
   const offsetY = -minY + padding;
 
+  const showLastMove = Boolean(isMyTurn && lastMove);
+  const lastMovePathOuter = getHexPath(hexSize * 1.05);
+  const lastMovePathInner = getHexPath(hexSize * 0.55);
+
   return (
     <div className="hex-grid-container" key={gridKey}>
       <svg
@@ -84,8 +102,20 @@ function HexGrid({
       >
         <g transform={`translate(${offsetX}, ${offsetY})`}>
           {hexPositions.map(({ position, stack, pixel }) => {
-            // Skip positions with no stack or no tiles
-            if (!stack || stack.tiles.length === 0) {
+            const isLastMoveFrom =
+              showLastMove &&
+              lastMove &&
+              positionsEqual(position, lastMove.from);
+            const isLastMoveTo =
+              showLastMove && lastMove && positionsEqual(position, lastMove.to);
+
+            // Skip positions with no stack and no last-move indicator
+            if (!stack) {
+              return null;
+            }
+
+            const hasTiles = stack.tiles.length > 0;
+            if (!hasTiles && !(isLastMoveFrom || isLastMoveTo)) {
               return null;
             }
 
@@ -101,21 +131,58 @@ function HexGrid({
 
             // Only clickable if it's my turn and the tile is selectable or is a valid destination
             const isClickable =
-              isMyTurn && (isLegalMove || isLegalDestination || isSelected);
+              hasTiles &&
+              isMyTurn &&
+              (isLegalMove || isLegalDestination || isSelected);
 
             return (
-              <HexTile
-                key={`${position.q},${position.r}`}
-                stack={stack}
-                x={pixel.x}
-                y={pixel.y}
-                size={hexSize}
-                isSelected={isSelected || false}
-                isLegalMove={isLegalMove}
-                isLegalDestination={isLegalDestination}
-                isClickable={isClickable}
-                onClick={() => onTileClick(position.q, position.r)}
-              />
+              <g key={`${position.q},${position.r}`}>
+                {hasTiles && (
+                  <HexTile
+                    stack={stack}
+                    x={pixel.x}
+                    y={pixel.y}
+                    size={hexSize}
+                    isSelected={isSelected || false}
+                    isLegalMove={isLegalMove}
+                    isLegalDestination={isLegalDestination}
+                    isClickable={isClickable}
+                    onClick={() => onTileClick(position.q, position.r)}
+                  />
+                )}
+
+                {(isLastMoveFrom || isLastMoveTo) && (
+                  <g
+                    className={`last-move-indicator ${
+                      isLastMoveTo ? "to" : "from"
+                    }`}
+                    transform={`translate(${pixel.x}, ${pixel.y})`}
+                  >
+                    <polygon
+                      points={lastMovePathOuter}
+                      fill={
+                        isLastMoveTo
+                          ? "rgba(244, 63, 94, 0.18)"
+                          : "rgba(192, 132, 252, 0.18)"
+                      }
+                      stroke={isLastMoveTo ? "#f43f5e" : "#a855f7"}
+                      strokeWidth={isLastMoveTo ? 5 : 4}
+                      strokeDasharray={isLastMoveTo ? undefined : "7 6"}
+                    />
+                    <polygon
+                      points={lastMovePathInner}
+                      fill={
+                        isLastMoveTo
+                          ? "rgba(244, 63, 94, 0.35)"
+                          : "rgba(192, 132, 252, 0.3)"
+                      }
+                      stroke={isLastMoveTo ? "#fb7185" : "#c084fc"}
+                      strokeWidth={2.5}
+                      strokeDasharray={isLastMoveTo ? "9 4" : "4 4"}
+                    />
+                  </g>
+                )}
+              </g>
             );
           })}
         </g>
