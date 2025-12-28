@@ -84,6 +84,23 @@ npm run dev
 - Frontend: http://localhost:5173
 - Backend: http://localhost:3001
 
+#### Development Mode (No Multiplayer Needed)
+
+For UI development and testing without needing two players:
+
+1. Start the dev server: `npm run dev`
+2. Navigate to http://localhost:5173/dev
+
+This displays a mock game page with:
+
+- Full game board with random initial state
+- Functional resign button
+- Test button to trigger round end toast
+- All UI components visible
+- No socket connection required
+
+Alternatively, click "Dev Mode" link at the bottom of the lobby page.
+
 ### Building
 
 ```bash

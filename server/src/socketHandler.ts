@@ -8,6 +8,7 @@ import {
   ServerToClientEvents,
   ClientToServerEvents,
   positionsEqual,
+  RoundResult,
 } from "../../shared/types";
 import {
   generateGameCode,
@@ -471,6 +472,65 @@ export function initializeSocketServer(
         startNextRound(room, loserColor);
         broadcastLegalMoves(room);
       }
+    });
+
+    socket.on("resignRound", () => {
+      if (!currentGameCode || !currentPlayerId) return;
+
+      const room = games.get(currentGameCode);
+      if (!room) return;
+
+      const { game } = room;
+
+      // Can only resign during active play
+      if (game.phase !== "playing") return;
+      if (game.currentPlayerId !== currentPlayerId) return;
+
+      const pinkPlayer = getPlayerByColor(game, "pink");
+      const bluePlayer = getPlayerByColor(game, "blue");
+
+      if (!pinkPlayer || !bluePlayer) return;
+
+      // Current player resigns, opponent wins
+      const currentPlayer = game.players.find((p) => p.id === currentPlayerId);
+      if (!currentPlayer) return;
+
+      const opponentColor = currentPlayer.color === "pink" ? "blue" : "pink";
+      const opponent = getPlayerByColor(game, opponentColor);
+      if (!opponent) return;
+
+      const visible = { pink: 0, blue: 0, yellow: 0 };
+
+      const result: RoundResult = {
+        pinkVisible: visible.pink,
+        blueVisible: visible.blue,
+        winnerId: opponent.id,
+        winnerColor: opponentColor,
+        tiebreaker: "resignation",
+      };
+
+      game.roundWinner = result.winnerId;
+
+      // Update scores
+      opponent.score++;
+
+      // Check for game end (first to 3)
+      if (opponent.score >= 3) {
+        game.phase = "game_end";
+        game.winner = opponent.id;
+
+        room.sockets.forEach((socket) => {
+          socket.emit("gameEnd", game.winner!, opponentColor);
+        });
+      } else {
+        game.phase = "round_end";
+      }
+
+      room.sockets.forEach((socket) => {
+        socket.emit("roundEnd", result);
+      });
+
+      broadcastGameState(room);
     });
 
     socket.on("disconnect", () => {

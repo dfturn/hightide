@@ -23,6 +23,7 @@ function GamePage() {
     deselectTile,
     moveTile,
     nextRound,
+    resignRound,
     clearRoundResult,
     rejoinGame,
     isConnected,
@@ -139,13 +140,23 @@ function GamePage() {
     const winner = gameState.players.find((p) => p.id === roundResult.winnerId);
     const isWinner = roundResult.winnerId === playerId;
 
-    toastMessage = `Round ${gameState.roundNumber} complete! `;
-    toastMessage += `Pink: ${roundResult.pinkVisible} | Blue: ${roundResult.blueVisible}. `;
+    // Check if this was a resignation
+    if (roundResult.tiebreaker === "resignation") {
+      toastMessage = `Round ${gameState.roundNumber} complete! `;
+      if (isWinner) {
+        toastMessage += "Your opponent resigned. You win this round!";
+      } else {
+        toastMessage += "You resigned this round.";
+      }
+    } else {
+      toastMessage = `Round ${gameState.roundNumber} complete! `;
+      toastMessage += `Pink: ${roundResult.pinkVisible} | Blue: ${roundResult.blueVisible}. `;
 
-    if (winner) {
-      toastMessage += isWinner
-        ? "You win this round!"
-        : `${winner.name} wins this round!`;
+      if (winner) {
+        toastMessage += isWinner
+          ? "You win this round!"
+          : `${winner.name} wins this round!`;
+      }
     }
 
     if (gameWinner) {
@@ -164,7 +175,11 @@ function GamePage() {
 
   return (
     <GameLayout>
-      <GameHeader gameCode={code || ""} />
+      <GameHeader
+        gameCode={code || ""}
+        showResignButton={isMyTurn && gameState.phase === "playing"}
+        onResign={resignRound}
+      />
 
       <ScoreBoard players={gameState.players} currentPlayerId={playerId} />
 

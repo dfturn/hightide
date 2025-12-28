@@ -111,6 +111,23 @@ function LobbyPage() {
         disabled={!isNameValid || !isCodeValid || !isConnected}
         loading={isJoining}
       />
+
+      {/* Development Mode Link */}
+      <div style={{ marginTop: "2rem", textAlign: "center" }}>
+        <a
+          href="/dev"
+          style={{
+            color: "var(--color-text-muted)",
+            fontSize: "0.75rem",
+            textDecoration: "none",
+            opacity: 0.6,
+          }}
+          onMouseOver={(e) => (e.currentTarget.style.opacity = "1")}
+          onMouseOut={(e) => (e.currentTarget.style.opacity = "0.6")}
+        >
+          Dev Mode (No multiplayer needed)
+        </a>
+      </div>
     </LobbyLayout>
   );
 }

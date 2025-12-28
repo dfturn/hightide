@@ -51,7 +51,7 @@ export interface RoundResult {
   blueVisible: number;
   winnerId: string | null;
   winnerColor: TileColor | null;
-  tiebreaker: "visible" | "highest_stack" | "last_move" | null;
+  tiebreaker: "visible" | "highest_stack" | "last_move" | "resignation" | null;
 }
 
 // Socket events
@@ -94,6 +94,7 @@ export interface ClientToServerEvents {
   moveTile: (to: Position) => void;
   deselectTile: () => void;
   nextRound: () => void;
+  resignRound: () => void;
 }
 
 // Utility functions for hex coordinates

@@ -34,6 +34,7 @@ interface GameContextType {
   deselectTile: () => void;
   moveTile: (to: Position) => void;
   nextRound: () => void;
+  resignRound: () => void;
   clearError: () => void;
   clearRoundResult: () => void;
 }
@@ -281,6 +282,10 @@ export function GameProvider({ children }: GameProviderProps) {
     setGameWinner(null);
   }, []);
 
+  const resignRound = useCallback(() => {
+    socket.emit("resignRound");
+  }, []);
+
   const clearError = useCallback(() => {
     setError(null);
   }, []);
@@ -307,6 +312,7 @@ export function GameProvider({ children }: GameProviderProps) {
     deselectTile,
     moveTile,
     nextRound,
+    resignRound,
     clearError,
     clearRoundResult,
   };
